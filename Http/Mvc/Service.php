@@ -1,6 +1,6 @@
 <?php
 
-namesapce Bunny\Http\Mvc;
+namespace Bunny\Http\Mvc;
 
 use Bunny\Http\Mvc\ConfigTrait;
 use Bunny\Log\LoggerTrait;

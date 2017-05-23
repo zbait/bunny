@@ -38,6 +38,6 @@ class Container implements ArrayAccess{
     }
 
     public function offsetUnset($index){
-        unset(self::$->context[$index]);
+        unset(self::$context[$index]);
     }
 }
