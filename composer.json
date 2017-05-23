@@ -1,0 +1,14 @@
+{
+    "name": "zbait/bunny",
+    "description": "A micro framework for PHP.",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Bunny\\": ""
+        }
+    }
+}
