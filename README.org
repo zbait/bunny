@@ -1,5 +1,5 @@
 * Bunny
-  Bunny是一个简单，易用，小巧，可扩展的PHP框架。她包含了Web，Websocket，worker的服务器端和客户端解决方案。
+  Bunny是一个简单，易用，小巧，可扩展的PHP框架。她包含了Web，Websocket，Async worker的服务器端和客户端解决方案。
 ** 组成部分
    - 请求对象
    - 响应对象
