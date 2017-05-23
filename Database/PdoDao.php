@@ -1,6 +1,6 @@
 <?php
 
-namespace Bunny\Database\Dao;
+namespace Bunny\Database;
 
 use PDO;
 use PDOStatement;
