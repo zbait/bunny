@@ -12,9 +12,12 @@ trait LoggerTrait{
      */
     protected $log;
 
-    protected function getLog() :Logger {
+    protected function getLog(string $name = '') :Logger {
+        if(empty($name)){
+            $name = str_ireplace('\\','',__CLASS__);
+        }
         if(empty($this->log)){
-            $this->log = new Logger(str_ireplace('\\','',__CLASS__), Config::getConfig("log"));
+            $this->log = new Logger($name, Config::getConfig("log"));
         }
         return $this->log;
     }

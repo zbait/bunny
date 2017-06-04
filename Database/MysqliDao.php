@@ -1,6 +1,6 @@
 <?php
 
-namespace Bunny\Database\Dao;
+namespace Bunny\Database;
 
 use MysqliDb;
 use Bunny\Config\Config;
@@ -28,8 +28,10 @@ class MysqliDao{
      * 通过配置文件初始化MysqliDao对象的静态方法
      *
      * @param string $tableName 设置默认使用的表名
+     *
+     * @return Bunny\Database\MysqliDao
      */
-    public static function create(string $tableName, string $tableId) :PdoDao {
+    public static function create(string $tableName, string $tableId) :MysqliDao {
         $dbConfig = Config::getConfig('database')['MysqliDao'];
         $dao = new MysqliDao($dbConfig);
         return $dao->setTable($tableName)->setTableId($tableId);
@@ -38,9 +40,9 @@ class MysqliDao{
     /**
      * 获取原始mysqli对象,本DAO中实现则基于这个方法实现懒加载
      *
-     * @return mysqliDb
+     * @return MysqliDb
      */
-    public function mysqli() :mysqliDb {
+    public function mysqli() :MysqliDb {
         if(empty($this->mysqli)){
             $this->mysqli = (new MysqliDb($this->config))->getInstance();
         }

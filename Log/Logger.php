@@ -70,6 +70,8 @@ class Logger {
             );
             return GearmanLogger::record($data, $this->config['gearman']['workerName'], $this->config['gearman']['servers']);
             break;
+        case 'echo':
+            return EchoLogger::record($level, $title, $info);
         default:
             throw new \Exception('Log driver is not config!');
         }

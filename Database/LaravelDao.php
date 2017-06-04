@@ -1,6 +1,6 @@
 <?php
 
-namespace Bunny\Database\Dao;
+namespace Bunny\Database;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Bunny\Config\Config;
