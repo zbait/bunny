@@ -1,20 +1,20 @@
 <?php
 
-namespace Bunny\Http\Mvc;
+namespace Bunny\Framework\Http;
 
 use Bunny\Http\Request;
 use Bunny\Http\Response;
 
-use Bunny\Http\Mvc\ConfigTrait;
-use Bunny\Log\LoggerTrait;
+use Bunny\Framework\ConfigAware;
+use Bunny\Framework\LoggerAware;
 
 /**
  * 控制器基础类
  */
 class Controller{
 
-    use LoggerTrait;
-    use ConfigTrait;
+    use LoggerAware;
+    use ConfigAware;
 
     /**
      * @var Bunny\Http\Request HTTP请求

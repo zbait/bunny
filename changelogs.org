@@ -1,0 +1,30 @@
+* 更新记录
+
+** v0.1.0
+   - 基础功能提供日志，配置文件
+   - 提供HTTP,WebSocket,Worker服务器实现
+   - 前端phtml,twig模板，API-JSON，页面渲染助手
+   - 业务支持MVC，默认路由和自定义路由
+   - 数据库支持Mysqli,PDO,LaravelORM，提供分页工具
+   - 客户端提供Gearman,HTTP,Redis
+   - 容器提供根据类定义动态获取
+   - 工具提供GUID获取
+** v0.2.0
+   - 基础组件优化
+     1.Log,Config使用Aware适配
+     2.消除Config对PATH_ROOT的依赖（为了适配nginx无法消除）
+     3.HTTP,Client,Container组件不再依赖基础组件
+   - 功能点优化
+     1.删除容器的array实现
+     2.删除Dao的Mysqli实现
+   - HTTP组件优化
+     1.完全独立无依赖
+     2.删除Action路由定义，使用自定义路由作为唯一实现
+     3.支持简单PHP+HTML模板和模板文件cache
+     4.优化render使用方式，使用构造器参数选择具体渲染方式''|'html'|'twig',其中空代表原生，默认为html
+     5.优化render在nginx下查找文件的问题，使用构造器参数传递根目录
+     6.优化render使用模板时系统变量和用户变量冲突的问题
+   - Framework组件优化
+     1.删除原有无用代码
+     2.提供Config,Logger,Echo的aware
+     3.提供HTTP层的MVC抽象实现

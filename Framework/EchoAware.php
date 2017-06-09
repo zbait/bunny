@@ -1,13 +1,13 @@
 <?php
 
-namespace Bunny\Log;
+namespace Bunny\Framework;
 
-use Bunny\Log\Provider\EchoLogger;
+use Bunny\Log\EchoLogger;
 
 /**
  * 服务器端记录日志
  */
-trait EchoLoggerTrait{
+trait EchoAware{
 
     /**
      * 记录日志

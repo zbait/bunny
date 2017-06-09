@@ -2,7 +2,6 @@
 
 namespace Bunny\Http;
 
-use Bunny\Http\Resolver\Resolver;
 /**
  * HTTP请求对象
  */

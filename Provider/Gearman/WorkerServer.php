@@ -6,7 +6,7 @@ namespace Bunny\Provider\Gearman;
 use GearmanWorker;
 
 // bunny
-use Bunny\Log\EchoLoggerTrait;
+use Bunny\Framwork\EchoAware;
 use Bunny\Config\Config;
 
 /**
@@ -14,7 +14,7 @@ use Bunny\Config\Config;
  */
 class WorkerServer{
 
-    use EchoLoggerTrait;
+    use EchoAware;
 
     public $config;
 	public $workers = array();

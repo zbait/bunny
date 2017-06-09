@@ -1,10 +1,10 @@
 <?php
 
-namespace Bunny\Http\Mvc;
+namespace Bunny\Framework\Http;
 
 use Bunny\Http\Request;
 use Bunny\Http\Response;
-use Bunny\Http\Mvc;
+use Bunny\Framework\Http\Controller;
 
 /**
  * API控制器基类

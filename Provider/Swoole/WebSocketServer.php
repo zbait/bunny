@@ -4,7 +4,7 @@ namespace Bunny\Provider\Swoole;
 
 // bunny
 use Bunny\Config\Config;
-use Bunny\Log\EchoLoggerTrait;
+use Bunny\Framework\EchoAware;
 use Bunny\Client\RedisClient;
 use Bunny\Provider\Swoole\Client;
 
@@ -18,7 +18,7 @@ use Swoole\Http\response as swoole_http_response;
  */
 class WebSocketServer{
 
-    use EchoLoggerTrait;
+    use EchoAware;
 
     /**
      * @var array 配置信息

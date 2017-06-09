@@ -2,42 +2,108 @@
 
 namespace Bunny\Container;
 
-use ArrayAccess;
-
 /**
- * 简易容器实现类
+ * 服务容器实现类。
+ * 1.服务容器
+ * 2.服务注册
+ * 3.服务实例化工厂
  */
-class Container implements ArrayAccess{
+class Container{
 
     /**
-     * @var array 容器上下文
+     * @var array 服务内容
      */
-    protected static $context = array();
+    protected $services = array();
 
     /**
-     * 根据名称获取容器中对象
-     *
-     * @param string $name
-     *
-     * @return mixed
+     * @var array $classMap 服务类模板
      */
-    public static function get(string $name){
-        return self[$name];
+    protected $classMap = array();
+
+    /**
+     * 服务设置
+     *
+     * @param string $id 服务标识
+     * @param object $service 服务实例，如果为null则重置
+     */
+    public function set(string $id, $service){
+        $this->services[$id] = $service;
+        if(null === $service){
+            unset($this->services[$id]);
+        }
     }
 
-    public function offsetExists($index){
-        return isset(self::$context[$index]);
+    /**
+     * 服务是否被定义
+     *
+     * @param string $id 服务id
+     */
+    public function has(string $id){
+        if (isset($this->services[$id])) {
+            return true;
+        }
+        if (isset($this->classMap[$id])) {
+            return true;
+        }
+        return false;
     }
 
-    public function offsetSet($index, $value){
-        self::$context[$index] = $value;
+    public function get($id){
+        $service = null;
+        if (isset($this->services[$id])) {
+            return $this->services[$id];
+        }
+        if (isset($this->classMap[$id])) {
+            try {
+                $args = $this->classMap[$id];
+                $service = $this->getInstance($args);
+            } catch (\Exception $e) {
+                unset($this->services[$id]);
+                throw $e;
+            }
+        }
+        return $service;
     }
 
-    public function offsetGet($index){
-        return (isset(self::$context[$index])) ? self::$context[$index] : '';
+    /**
+     * 服务类模板设置
+     *
+     * @param string $id 服务标识
+     * @param array $args 服务模板类，如果为null则重置 array('className', args1, args2)
+     */
+    public function register(string $id, array $args){
+        $this->classMap[$id] = $args;
+        if(null === $args){
+            unset($this->classMap[$id]);
+        }
     }
 
-    public function offsetUnset($index){
-        unset(self::$context[$index]);
+    /**
+     * 重置整个容器
+     */
+    public function reset(){
+        $this->services = array();
+    }
+
+    /**
+     * 获取容器所有服务类ID
+     */
+    public function getServiceIds(){
+        return array_unique(array_merge(array_keys($this->classMap), array_keys($this->services)));
+    }
+
+    /**
+     * 获取类实例,如果参数使用"@"则从容器获取并注入
+     */
+    public function getInstance() {
+        $arguments = func_get_args();
+        $className = array_shift($arguments[0]);
+        $class = new \ReflectionClass($className);
+        foreach($arguments as $index => $args) {
+			if($args[0] == '@'){
+				$arguments[$index] = $this->get(substr($args, 1, strlen($args)));
+			}
+		}
+        return $class->newInstanceArgs($arguments);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Bunny\Provider\Swoole;
 
-use Bunny\Log\EchoLoggerTrait;
+use Bunny\Framework\EchoAware;
 use Bunny\Client\RedisClient;
 use Swoole\Websocket\Server as swoole_websocket_server;
 
@@ -10,7 +10,7 @@ use Swoole\Websocket\Server as swoole_websocket_server;
  */
 class Event{
 
-    use EchoLoggerTrait;
+    use EchoAware;
 
     /**
      * @var Bunny\Provider\Swoole\WebSocketServer WebSocket服务端应用上下文

@@ -4,11 +4,8 @@ namespace Bunny\Http;
 
 use Bunny\Http\Request;
 use Bunny\Http\Response;
-use Bunny\Http\Handler;
-use Bunny\Http\Resolver\Resolver;
-use Bunny\Http\Render\Render;
-
-use Bunny\Config\Config;
+use Bunny\Http\Resolver;
+use Bunny\Http\Render;
 
 /**
  * HTTP Server
@@ -72,8 +69,7 @@ class Server{
         $class = new $className($this->request, $this->response);
         //开启缓冲区
         ob_start();
-        //TODO:目前没有传递参数
-        //业务方法
+        //业务方法 TODO:目前没有传递参数
         call_user_func_array(array($class, 'before'), array());
         call_user_func_array(array($class, $methodName), array());
         call_user_func_array(array($class, 'after'), array());

@@ -15,11 +15,6 @@ class Config {
     const ENV = 'bunny.env';
 
     /**
-     * @var string 模板类型 twig
-     */
-    const TEMPLATE = '';
-
-    /**
      * @var array 全局变量集合
      */
     private static $context = array(

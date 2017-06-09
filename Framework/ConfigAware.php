@@ -1,19 +1,13 @@
 <?php
 
-namespace Bunny\Http\Mvc;
+namespace Bunny\Framework;
 
 use Bunny\Config\Config;
 
 /**
- * 业务配置文件使用
+ * 业务配置文件应用
  */
-trait ConfigTrait{
-
-
-    /**
-     * @var array
-     */
-    private $config;
+trait ConfigAware{
 
     /**
      * 获取config业务配置文件
@@ -21,10 +15,7 @@ trait ConfigTrait{
      * @return array
      */
     public function getConfig() :array {
-        if(empty($this->config)){
-            $this->config = Config::getConfig('config');
-        }
-        return $this->config;
+        return Config::getConfig('config');
     }
 
     /**
@@ -35,7 +26,8 @@ trait ConfigTrait{
      * @return mixed
      */
     public function getConfigValue(string $name){
-        return $this->getConfig()[$name];
+        $config = Config::getConfig('config');
+        return $config[$name];
     }
 
 
