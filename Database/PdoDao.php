@@ -48,7 +48,7 @@ class PdoDao{
      *
      * @param string $tableName 设置默认使用的表名
      */
-    public static function create(string $tableName) :PdoDao {
+    public static function create(string $tableName, string $idName = 'id', string $createTimeName = 'create_time', string $updateTimeName = 'update_time') :PdoDao {
         $dbConfig = Config::getConfig('database')['PdoDao'];
         $dbms = $dbConfig['driver'];
         $host = $dbConfig['host'];
@@ -58,7 +58,7 @@ class PdoDao{
         $port = $dbConfig['port'];
         $dsn = "$dbms:host=$host;port=$port;dbname=$dbName";
         $dao = new PdoDao($dsn, $user, $pass);
-        return $dao->setTable($tableName);
+        return $dao->setMetadata($tableName, $idName, $createTimeName, $updateTimeName);
     }
 
     /**
@@ -109,6 +109,19 @@ class PdoDao{
     }
 
     /**
+     * 删除指定ID数据
+     *
+     * @param $id
+     */
+    public function deleteById($id) :string {
+        $sql = 'delete from '.$this->tableName.' where '.$this->idName.' = :'.$this->idName;
+        $data = array(
+            $this->idName => $id
+        );
+        return $this->delete($sql, $data);
+    }
+
+    /**
      * 查询方法
      *
      * @param string $sql 要执行的sql，替换符建议使用:name
@@ -124,9 +137,24 @@ class PdoDao{
     // ========== 设置表信息 ==========
 
     /**
-     * @var string $tableName
+     * @var string $tableName 表名称
      */
     private $tableName;
+
+    /**
+     * @var string $idName 主键名称
+     */
+    private $idName;
+
+    /**
+     * @var string $createTimeName 创建时间名称
+     */
+    private $createTimeName;
+
+    /**
+     * @var string $updateTimeName 更新时间名称
+     */
+    private $updateTimeName;
 
     /**
      * 设置表名
@@ -135,22 +163,25 @@ class PdoDao{
      *
      * @return Bunny\Database\Dao\PdoDao
      */
-    public function setTable(string $tableName) :PdoDao{
+    public function setMetadata(string $tableName, string $idName = 'id', string $createTimeName = 'create_time', string $updateTimeName = 'update_time') :PdoDao{
         $this->tableName = $tableName;
+        $this->idName = $idName;
+        $this->createTimeName = $createTimeName;
+        $this->updateTimeName = $updateTimeName;
         return $this;
     }
 
     // ========== 常见操作封装 ==========
 
     /**
-     * 添加方法。
+     * 添加方法,需要使用自增ID
      *
      * @param array $data 要insert的数据，key需要使用替换符
      *
      * @return string insert id
      */
-    public function insertById(array $data) :string {
-        $data['id'] = Guid::get();
+    public function insert(array $data) :string {
+        $data[$this->createTimeName] = $this->getTime();
         $keys = '';
         $values = '';
         $params = array();
@@ -166,22 +197,35 @@ class PdoDao{
         $sql .= ')';
         $st = $this->pdo()->prepare($sql);
         $st->execute($params);
-        //TODO:没有处理自增长ID
-        //$this->pdo()->lastInsertId();
-        return $data['id'];
+        return $this->pdo()->lastInsertId();
     }
 
     /**
-     * 删除指定ID数据
+     * 添加方法。
      *
-     * @param string $id
+     * @param array $data 要insert的数据，key需要使用替换符
+     *
+     * @return string insert id
      */
-    public function deleteById(string $id) :string {
-        $sql = 'delete from '.$this->tableName.' where id = :id';
-        $data = array(
-            'id' => $id
-        );
-        return $this->delete($sql, $data);
+    public function insertById(array $data) :string {
+        $data['id'] = Guid::get();
+        $data[$this->createTimeName] = $this->getTime();
+        $keys = '';
+        $values = '';
+        $params = array();
+        foreach($data as $key => $value){
+            $params[':'.$key] = $value;
+            $keys .= $key.',';
+            $values .= ':'.$key.',';
+        }
+        $sql = 'insert into '.$this->tableName.' (';
+        $sql .= substr($keys, 0, -1);
+        $sql .= ') values (';
+        $sql .= substr($values, 0, -1);
+        $sql .= ')';
+        $st = $this->pdo()->prepare($sql);
+        $st->execute($params);
+        return $data['id'];
     }
 
     /**
@@ -191,18 +235,55 @@ class PdoDao{
      *
      * @return int 影响行数
      */
+    public function update(array $data, array $where){
+        $data[$this->updateTimeName] = $this->getTime();
+        $sql = 'update '.$this->tableName.' set ';
+
+        $keyValues = '';
+        $keyValuesWhere = '';
+        $params = array();
+        foreach($data as $key => $value){
+            $params[':'.$key] = $value;
+            if($key != $this->idName){
+                $keyValues .= $key.'=:'.$key.',';
+            }
+        }
+        foreach($where as $key => $value){
+            $params[':'.$key] = $value;
+            if($key != $this->idName){
+                $keyValuesWhere .= $key.'=:'.$key.' and ';
+            }
+        }
+        $sql .= substr($keyValues, 0, -1);
+        $sql .= ' where ';
+        $sql .= substr($keyValuesWhere, 0, -4);
+        var_dump($sql);
+        $st = $this->pdo()->prepare($sql);
+        $st->execute($params);
+        return $st->rowCount();
+    }
+
+
+    /**
+     * 修改方法。
+     *
+     * @param array $data 要insert的数据，key需要使用替换符
+     *
+     * @return int 影响行数
+     */
     public function updateById(array $data){
+        $data[$this->updateTimeName] = $this->getTime();
         $keyValues = '';
         $params = array();
         foreach($data as $key => $value){
             $params[':'.$key] = $value;
-            if($key != 'id'){
+            if($key != $this->idName){
                 $keyValues .= $key.'=:'.$key.',';
             }
         }
         $sql = 'update '.$this->tableName.' set ';
         $sql .= substr($keyValues, 0, -1);
-        $sql .= ' where id=:id';
+        $sql .= ' where '.$this->idName.'=:'.$this->idName;
         $st = $this->pdo()->prepare($sql);
         $st->execute($params);
         return $st->rowCount();
@@ -214,9 +295,9 @@ class PdoDao{
      * @param string $id
      */
     public function fetchById(string $id) :array {
-        $sql = 'select * from '.$this->tableName.' where id = :id';
+        $sql = 'select * from '.$this->tableName.' where '.$this->idName.' = :'.$this->idName;
         $data = array(
-            'id' => $id
+            $this->idName => $id
         );
         $st = $this->exec($sql, $data);
         while($row = $st->fetch(PDO::FETCH_ASSOC)){
@@ -228,9 +309,9 @@ class PdoDao{
     /**
      * 查询所有数据
      */
-    public function fetchAll() :array {
-        $sql = 'select * from '.$this->tableName;
-        return $this->query($sql, array());
+    public function fetchAll($where = array()) :array {
+        $sql = 'select * from '.$this->tableName.$this->getWhereSql($where);
+        return $this->query($sql, $where);
     }
 
     /**
@@ -286,6 +367,15 @@ class PdoDao{
         return $this->query($sql, $where);
     }
 
+
+    public function fetchOne($where, $order = array()){
+        $ret = $this->fetch($where,0,1,$order);
+        if(count($ret) > 0){
+            $ret = $ret[0];
+        }
+        return $ret;
+    }
+
     /**
      * 添加多数据
      *
@@ -300,5 +390,15 @@ class PdoDao{
      */
     public function close(){
         $this->pdo = null;
+    }
+
+    /**
+     * 获取当前时间
+     *
+     * @return string 当前时间
+     */
+    private function getTime() :string {
+        $datetime = new \DateTime;
+        return $datetime->format('Y-m-d H:i:s');
     }
 }
