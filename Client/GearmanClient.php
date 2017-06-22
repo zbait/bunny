@@ -13,6 +13,8 @@ class GearmanClient {
      * 获取Gearman Client实例
      *
      * @param array $servers array('host1' => port, 'host2' => port2)
+     *
+     * @return GearmanClient
      */
 	public static function create(array $servers) :\GearmanClient{
         $client = new Client();

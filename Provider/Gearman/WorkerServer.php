@@ -6,7 +6,7 @@ namespace Bunny\Provider\Gearman;
 use GearmanWorker;
 
 // bunny
-use Bunny\Framwork\EchoAware;
+use Bunny\Framework\EchoAware;
 use Bunny\Config\Config;
 
 /**

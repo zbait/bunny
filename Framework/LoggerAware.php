@@ -32,7 +32,7 @@ trait LoggerAware{
             $config = Config::getConfig("log");
             //设置文件名称
             $this->name = str_ireplace('\\','',__CLASS__);
-            switch($this->config['driver']){
+            switch($config['driver']){
             case 'file':
                 //可以使用单文件存储日志
                 if($config['file']['fileName'] == 'bunny'){
@@ -58,7 +58,8 @@ trait LoggerAware{
      * @param string $level 级别
      */
     protected function record(string $title, $info, string $level = 'INFO'){
-        switch($this->driver){
+        $config = Config::getConfig("log");
+        switch($config['driver']){
         case 'file':
             return $this->getLog()->record($level, $title, $info);
             break;
@@ -98,7 +99,8 @@ trait LoggerAware{
      * @throws Exception 当日志驱动不支持时
      */
     public function debug(string $title, $info) :bool{
-        if(!$this->config['debug']){
+        $config = Config::getConfig("log");
+        if(!$config['debug']){
             return true;
         }
         return $this->record($title, $info, 'DEBUG');
