@@ -48,7 +48,7 @@ class Render{
         }
         if($this->type == 'html'){
             $_name = base64_encode($view);
-            $_folder = 'var/cache/html/';
+            $_folder = $this->rootDir.'var/cache/html/';
             $_file = $_folder.$_name;
             !is_dir($_folder) && mkdir($_folder, 0777, true);
             if (!is_file($_file) or @filemtime($view) > @filemtime($_file)) {
