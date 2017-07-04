@@ -1,8 +1,8 @@
 <?php
 namespace Bunny\Provider\Swoole;
 
-use Bunny\Framework\EchoAware;
-use Bunny\Client\RedisClient;
+use Bunny\Framework\Aware\EchoAware;
+use Bunny\Framework\Aware\FactoryAware;
 use Swoole\Websocket\Server as swoole_websocket_server;
 
 /**
@@ -11,6 +11,7 @@ use Swoole\Websocket\Server as swoole_websocket_server;
 class Event{
 
     use EchoAware;
+    use FactoryAware;
 
     /**
      * @var Bunny\Provider\Swoole\WebSocketServer WebSocket服务端应用上下文
@@ -181,7 +182,7 @@ class Event{
      * @return string
      */
     public function getBindValue(string $groupID = ''){
-        $redis = RedisClient::create($this->app->config['redis']);
+        $redis = $this->getRedis();
         $host = $this->app->config['server']['host'];
         if(empty($groupID)){
             return $redis->get($host.':'.$this->fd);
@@ -223,9 +224,5 @@ class Event{
         }else{
             return $redis->lLen($groupID.':'.$host);
         }
-    }
-
-    private function getRedis(){
-        return RedisClient::create($this->app->config['redis']);
     }
 }
