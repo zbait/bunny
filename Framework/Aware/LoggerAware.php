@@ -29,7 +29,7 @@ trait LoggerAware{
      */
     protected function getLog(){
         if(empty($this->logger)){
-            $config = Config::getConfig("log");
+            $config = Config::getConfig("config_app")['log'];
             //设置文件名称
             $this->name = str_ireplace('\\','',__CLASS__);
             switch($config['driver']){
@@ -58,7 +58,7 @@ trait LoggerAware{
      * @param string $level 级别
      */
     protected function record(string $title, $info, string $level = 'INFO'){
-        $config = Config::getConfig("log");
+        $config = Config::getConfig("config_app")['log'];
         switch($config['driver']){
         case 'file':
             return $this->getLog()->record($level, $title, $info);
@@ -99,7 +99,7 @@ trait LoggerAware{
      * @throws Exception 当日志驱动不支持时
      */
     public function debug(string $title, $info) :bool{
-        $config = Config::getConfig("log");
+        $config = Config::getConfig("config_app")['log'];
         if(!$config['debug']){
             return true;
         }
