@@ -5,7 +5,7 @@ namespace Bunny\Provider\Swoole;
 // bunny
 use Bunny\Config\Config;
 use Bunny\Framework\EchoAware;
-use Bunny\Client\RedisClient;
+use Bunny\Framework\Aware\FactoryAware;
 use Bunny\Provider\Swoole\Client;
 
 // swoole
@@ -19,6 +19,7 @@ use Swoole\Http\response as swoole_http_response;
 class WebSocketServer{
 
     use EchoAware;
+    use FactoryAware;
 
     /**
      * @var array 配置信息
@@ -44,10 +45,10 @@ class WebSocketServer{
      * 3.清空之前的绑定信息
      */
     public function __construct(){
-        $config = Config::getConfig('websocket');
+        $config = $this->getAppConfig();
         $this->config = $config;
         //启动清理绑定数据
-        $redis = RedisClient::create($config['redis']);
+        $redis = $this->getRedis();
         $host = $config['server']['host'];
         $allowIP = $config['server']['allowIP'];
         $port = $config['server']['port'];
