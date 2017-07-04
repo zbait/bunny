@@ -18,8 +18,8 @@ class Config {
      * @var array 全局变量集合
      */
     private static $context = array(
-        //TODO:需要适配vender目录结构
-        self::PATH_ROOT => __DIR__.'/../../../',
+        //默认为composer文件目录
+        self::PATH_ROOT => __DIR__.'/../../../../',
         self::ENV => 'dev'
     );
 

@@ -5,8 +5,8 @@ namespace Bunny\Framework\Http;
 use Bunny\Http\Request;
 use Bunny\Http\Response;
 
-use Bunny\Framework\ConfigAware;
-use Bunny\Framework\LoggerAware;
+use Bunny\Framework\Aware\FactoryAware;
+use Bunny\Framework\Aware\LoggerAware;
 
 /**
  * 控制器基础类
@@ -14,7 +14,7 @@ use Bunny\Framework\LoggerAware;
 class Controller{
 
     use LoggerAware;
-    use ConfigAware;
+    use FactoryAware;
 
     /**
      * @var Bunny\Http\Request HTTP请求

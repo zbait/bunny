@@ -23,7 +23,7 @@ class WorkerServer{
 	public $restart;
 
     public function __construct(bool $restart = false) {
-        $this->config = Config::getConfig('worker');
+        $this->config = Config::getConfig('config_app');
         $this->restart = $restart;
     }
 

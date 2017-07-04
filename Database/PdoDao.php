@@ -44,24 +44,6 @@ class PdoDao{
     }
 
     /**
-     * 通过配置文件初始化PdoDao对象的静态方法
-     *
-     * @param string $tableName 设置默认使用的表名
-     */
-    public static function create(string $tableName, string $idName = 'id', string $createTimeName = 'create_time', string $updateTimeName = 'update_time') :PdoDao {
-        $dbConfig = Config::getConfig('database')['PdoDao'];
-        $dbms = $dbConfig['driver'];
-        $host = $dbConfig['host'];
-        $dbName = $dbConfig['dbName'];
-        $user = $dbConfig['user'];
-        $pass = $dbConfig['password'];
-        $port = $dbConfig['port'];
-        $dsn = "$dbms:host=$host;port=$port;dbname=$dbName";
-        $dao = new PdoDao($dsn, $user, $pass);
-        return $dao->setMetadata($tableName, $idName, $createTimeName, $updateTimeName);
-    }
-
-    /**
      * 获取原始pdo对象,本DAO中实现则基于这个方法实现懒加载
      *
      * @return PDO

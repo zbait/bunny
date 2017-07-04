@@ -2,15 +2,15 @@
 
 namespace Bunny\Framework\Http;
 
-use Bunny\Framework\ConfigAware;
-use Bunny\Framework\LoggerAware;
+use Bunny\Framework\Aware\FactoryAware;
+use Bunny\Framework\Aware\LoggerAware;
 
 /**
  * 基础业务服务类
  */
 class Service{
 
-    use ConfigAware;
+    use FactoryAware;
     use LoggerAware;
 
 }

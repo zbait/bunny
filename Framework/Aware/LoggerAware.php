@@ -1,6 +1,6 @@
 <?php
 
-namespace Bunny\Framework;
+namespace Bunny\Framework\Aware;
 
 use Bunny\Config\Config;
 use Bunny\Log\FileLogger;
