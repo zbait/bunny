@@ -3,8 +3,7 @@
 namespace Bunny\Provider\Swoole;
 
 // bunny
-use Bunny\Config\Config;
-use Bunny\Framework\EchoAware;
+use Bunny\Framework\Aware\EchoAware;
 use Bunny\Framework\Aware\FactoryAware;
 use Bunny\Provider\Swoole\Client;
 
@@ -169,7 +168,7 @@ class WebSocketServer{
                 throw new \Exception('data format error : it is json with action and data property?');
             }
             //路由解析
-            $router = Config::getConfig('websocket_router', false);
+            $router = $this->config['router'];
             $action = $msg['action'];
             $info = $msg['data'];
             if(!isset($router[$action])){
@@ -209,7 +208,7 @@ class WebSocketServer{
 	        	call_user_func_array(array($class, $methodName), array());
             }
             //清除对应绑定数据
-            $redis = RedisClient::create($config['redis']);
+            $redis = $this->getRedis();
             $host = $config['server']['host'];
             $redis->del($host.':'.$fd);
             $groupKey = $redis->get($host.':'.$fd.':group');
