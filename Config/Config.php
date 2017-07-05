@@ -20,7 +20,7 @@ class Config {
     private static $context = array(
         //默认为composer文件目录
         self::PATH_ROOT => __DIR__.'/../../../../',
-        self::ENV => 'dev'
+        self::ENV => 'local'
     );
 
     /**
@@ -66,12 +66,12 @@ class Config {
      * @pram bool $useEnv 是否使用环境
      * @param string $filePath 配置文件所在目录,如果没有则使用默认目录
      */
-    public static function getConfig(string $fileName, bool $useEnv = true, string $fileDir = "") :array {
+    public static function getConfig(string $fileName = '', string $fileDir = "") :array {
         //获取文件名
-        if($useEnv){
-            $fileName = $fileName.'_'.self::$context[self::ENV].'.php';
+        if(empty($fileName)){
+            $fileName = self::$context[self::ENV].'.php';
         }else{
-            $fileName = $fileName.'.php';
+            $fileName = self::$context[self::ENV].'_'.$fileName.'.php';
         }
         //获取文件全路径
         if(empty($fileDir)){

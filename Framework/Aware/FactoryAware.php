@@ -16,7 +16,7 @@ trait FactoryAware{
      * @return array
      */
     public function getConfig() :array {
-        return Config::getConfig('config');
+        return Config::getConfig();
     }
 
     /**
@@ -25,7 +25,7 @@ trait FactoryAware{
      * @return array
      */
     public function getAppConfig() :array {
-        return Config::getConfig('config_app');
+        return Config::getConfig('app');
     }
 
     /**
