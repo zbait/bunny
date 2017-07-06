@@ -324,6 +324,10 @@ class PdoDao{
 	 * @return bool
 	 */
 	public function existById(string $id) :bool {
+        $where = array(
+            $this->idName => $id
+        );
+        return $this->exist($where);
     }
 
     /**
@@ -331,7 +335,9 @@ class PdoDao{
 	 * @param string $id
 	 * @return bool
 	 */
-	public function exist(array $where = array()) :bool {
+	public function exist(array $where) :bool {
+        $num = $this->count($where);
+        return ($num>0)?true:false;
     }
 
     /**
