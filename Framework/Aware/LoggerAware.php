@@ -99,7 +99,7 @@ trait LoggerAware{
      * @throws Exception 当日志驱动不支持时
      */
     public function debug(string $title, $info) :bool{
-        $config = Config::getConfig("config_app")['log'];
+        $config = Config::getConfig("app")['log'];
         if(!$config['debug']){
             return true;
         }
