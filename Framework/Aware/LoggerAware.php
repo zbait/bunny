@@ -29,7 +29,7 @@ trait LoggerAware{
      */
     protected function getLog(){
         if(empty($this->logger)){
-            $config = Config::getConfig("config_app")['log'];
+            $config = Config::getConfig("app")['log'];
             //设置文件名称
             $this->name = str_ireplace('\\','',__CLASS__);
             switch($config['driver']){
@@ -58,7 +58,7 @@ trait LoggerAware{
      * @param string $level 级别
      */
     protected function record(string $title, $info, string $level = 'INFO'){
-        $config = Config::getConfig("config_app")['log'];
+        $config = Config::getConfig("app")['log'];
         switch($config['driver']){
         case 'file':
             return $this->getLog()->record($level, $title, $info);
