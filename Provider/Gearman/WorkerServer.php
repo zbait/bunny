@@ -77,7 +77,7 @@ class WorkerServer{
             }
             //worker进程处理
             $gearmanWorker= new GearmanWorker();
-            $server = isset($this->config['server']) ? $this->config['server'] : array('127.0.0.1' => 4730);
+            $server = isset($this->config['gearman']) ? $this->config['gearman'] : array('127.0.0.1' => 4730);
             foreach ($server as $host => $port) {
                 $gearmanWorker->addServer($host, (int)$port);
             }
