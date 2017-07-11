@@ -10,6 +10,14 @@ use redis;
 
 trait FactoryAware{
 
+    public function getEnv(){
+        return Config::getGlobal(Config::ENV);
+    }
+
+    public function getRootPath(){
+        return Config::getGlobal(Config::PATH_ROOT);
+    }
+
     /**
      * 获取config业务配置文件
      *
