@@ -1,5 +1,6 @@
 # macosx
 .DS_Store
+.idea
 
 # php
 composer.lock

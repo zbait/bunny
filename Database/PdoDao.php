@@ -67,7 +67,7 @@ class PdoDao{
      *
      * @return PDOStatement
      */
-    private function exec(string $sql, array $data) :PDOStatement {
+    public function exec(string $sql, array $data) :PDOStatement {
         $params = array();
         foreach($data as $key => $value){
             $params[':'.$key] = $value;
